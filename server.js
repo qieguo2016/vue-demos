@@ -48,7 +48,7 @@ app.get(publicPath + 'api/*', function (req, res) {
 	if (publicPath !== '/') {
 		url = baseUrl + '/' + req.url.split(publicPath)[1]
 	}
-	logger.debug('proxy request: ' + url)
+	logger.info('proxy request: ' + url)
 	request.get(url).pipe(res)
 });
 
@@ -61,11 +61,20 @@ app.get(publicPath + 'loadImg', function (req, res) {
 
 // send app's index.html
 if (isProd) {
-	const entryDir = path.resolve(__dirname, 'dist' + publicPath + 'index.html')
-	const entryFile = fs.readFileSync(entryDir, 'utf-8')  // ceche file
-	app.get(publicPath.slice(0, publicPath.length - 1) + '*', function (req, res) {
-		logger.debug('local request: ' + req.url)
-		res.send(entryFile)
+	const baseDir = path.resolve(__dirname, 'dist');
+	let dirs = fs.readdirSync(baseDir)
+	let files = {}
+	dirs.forEach(function (dir) {
+		files[dir] = fs.readFileSync(path.join(baseDir, dir, 'index.html'), 'utf-8')  // ceche file
+		app.get('/' + dir + '*', function (req, res) {
+			logger.info('local request: ' + req.url)
+			res.send(files[dir])
+		})
+	});
+	// default
+	app.get('*', function (req, res) {
+		logger.info('home request: ' + req.url)
+		res.redirect('/zhihudaily');
 	})
 }
 
@@ -73,5 +82,5 @@ if (isProd) {
 // send app's index.html
 const port = config.SERVER_PORT
 const server = http.createServer(app).listen(port)
-console.log(`start server http://localhost:${port}`)
+logger.info(`start server http://localhost:${port}`)
 

@@ -49,7 +49,6 @@
 </script>
 
 <style>
-  @import './assets/carousel.css';
   @import './assets/zhihu.css';
   @import './assets/animate.min.css';
 
