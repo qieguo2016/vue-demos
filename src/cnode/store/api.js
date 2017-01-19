@@ -1,32 +1,40 @@
 import axios from 'axios'
-import config from '../../../config'
 
-// const publicPath = '/'   // 部署在根目录下直接使用/
-const publicPath = config.publicPath   // '/daily/'
+// cnode可以开放了API，不需要转发，可以直接发起cors请求
 
 const defaults = {
-	baseURL: publicPath + 'api/4',
-	transformResponse: [(data) => {
-		return JSON.parse(replaceImageUrl(data))
-	}]
+  baseURL: 'https://cnodejs.org/api/v1',
+  // transformResponse: [(data) => {
+  //   return JSON.parse(replaceImageUrl(data))
+  // }]
 }
 
 Object.assign(axios.defaults, defaults)
 
-export const fetchLatest = () => {
-	return axios.get('/news/latest')
+axios.interceptors.response.use(function (response) {
+  // 数据提取、loading动画处理等
+  if (response.data.success) {
+    response.data = response.data.data
+    return response
+  } else {
+    return Promise.reject(error);
+  }
+}, function (error) {
+  // Do something with response error
+  return Promise.reject(error);
+});
+
+export function fetchTopics(type = 'all', page = 1) {
+  let url = `/topics?limit=20&tab=${type}&page=${page}`;   // 每页数量为20条
+  return axios.get(url);
 }
 
-export const fetchBefore = (date) => {
-	return axios.get(`/news/before/${date}`)
+export function fetchTopicDetail(id) {
+  return axios.get(`/topic/${id}`)
 }
 
-export const fetchDetail = (id) => {
-	return axios.get(`/news/${id}`)
-}
-
-function replaceImageUrl(str) {
-	let reg = /https?:(\\?\/){2}(pic\d*\.zhimg\.com\\?\/)/g
-	// return str.replace(reg, 'https://images.weserv.nl/?url=$2')
-	return str.replace(reg, config.publicPath + 'loadImg?url=$2')
-}
+// function replaceImageUrl(str) {
+//   let reg = /https?:(\\?\/){2}(pic\d*\.zhimg\.com\\?\/)/g
+//   // return str.replace(reg, 'https://images.weserv.nl/?url=$2')
+//   return str.replace(reg, config.publicPath + 'loadImg?url=$2')
+// }

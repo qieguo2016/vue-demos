@@ -7,11 +7,11 @@ import List from '../views/List.vue'
 import Detail from '../views/Detail.vue'
 import config from '../../../config'
 
-// const publicPath = '/'   // 部署在根目录下直接使用/
-const publicPath = config.publicPath   // '/zhihudaily/'
+const publicPath = config.publicPath   // 部署在根目录下直接使用 '/',多目录则用路径
 
 export default new Router({
 	mode: 'history',
+	base: publicPath,
 	scrollBehavior: (to, from, savedPosition) => {
 		if (savedPosition) {
 			return savedPosition
@@ -21,18 +21,18 @@ export default new Router({
 			x: 0,
 			y: 0
 		}
-		if (to.path === publicPath) {
+		if (to.path === '/') {
 			position.y = +sessionStorage.getItem('scrollTop') || 0
 		}
 		return position
 	},
 	routes: [
 		{
-			path: publicPath,
+			path: '/',
 			component: List
 		},
 		{
-			path: publicPath + 'detail/:id',
+			path: '/detail/:id',
 			component: Detail
 		}
 	]

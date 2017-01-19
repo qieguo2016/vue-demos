@@ -17,7 +17,7 @@
             <div class="list-title">
                 {{day.date | date}}
             </div>
-            <router-link :to="`detail/${item.id}`" v-for="item in day.stories" class="media">
+            <router-link :to="`/detail/${item.id}`" v-for="item in day.stories" class="media">
                 <div class="media-body">
                     {{item.title}}
                 </div>

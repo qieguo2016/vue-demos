@@ -2,20 +2,24 @@
   <div id="app">
     <header class="header">
       <nav class="inner">
-        <router-link :to="publicPath">
-          <img src="./assets/logo.png" alt="" class="zhihu-logo">
+        <router-link to="/">
+          <img src="./assets/cnodejs_light.svg" alt="logo" class="site-logo">
         </router-link>
-        <router-link :to="publicPath">
-          知乎日报
-        </router-link>
-        <a href="https://github.com/qieguo2016/vue-zhihudaily" target="_blank" class="github">
+        <a href="https://github.com/qieguo2016/vue-demos" target="_blank" class="github">
           Built with Vue.js 2.0
         </a>
       </nav>
+      <nav class="inner">
+        <router-link to="/all">首页</router-link>
+        <router-link to="/good">精华</router-link>
+        <router-link to="/share">分享</router-link>
+        <router-link to="/ask">问答</router-link>
+        <router-link to="/job">招聘</router-link>
+      </nav>
     </header>
     <transition
-      name="slide"
-      :enter-active-class="enterActiveClass"
+        name="slide"
+        :enter-active-class="enterActiveClass"
     >
       <keep-alive>
         <router-view class="view"></router-view>
@@ -49,41 +53,45 @@
 </script>
 
 <style>
-  @import './assets/zhihu.css';
-  @import './assets/animate.min.css';
+  @import './assets/index.css';
+  /*@import './assets/animate.min.css';*/
 
   body {
-    font-family:  "Lucida Grande",
-                  "Helvetica Neue",
-                  Helvetica, Arial,
-                  "Hiragino Sans GB",
-                  "Hiragino Sans GB W3",
-                  "WenQuanYi Micro Hei",
-                  "Microsoft YaHei UI",
-                  "Microsoft YaHei",
-                  sans-serif;
+    font-family: "Lucida Grande",
+    "Helvetica Neue",
+    Helvetica, Arial,
+    "Hiragino Sans GB",
+    "Hiragino Sans GB W3",
+    "WenQuanYi Micro Hei",
+    "Microsoft YaHei UI",
+    "Microsoft YaHei",
+    sans-serif;
     -webkit-font-smoothing: antialiased;
-    /*background: #f6f6f6;*/
   }
+
   .inner,
   .view {
     max-width: 800px;
     margin: auto;
   }
+
   .header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background-color: #009dd7;
+    background-color: #444;
     z-index: 100;
   }
+
   .inner {
     padding: 5px 10px;
   }
-  .zhihu-logo {
+
+  .site-logo {
     height: 30px;
   }
+
   .inner > a {
     display: inline-block;
     color: #fff;
@@ -93,19 +101,24 @@
     line-height: 30px;
     font-weight: bold;
   }
+
   .inner a.router-link-active {
     font-weight: bold;
   }
+
   .inner > a:hover,
   .inner > a:focus {
     text-decoration: none;
     outline: none;
   }
+
   .github {
     float: right;
     padding: 0;
+    margin-top: 9px;
   }
+
   .view {
-    padding-top: 40px;
+    padding: 80px 15px 10px;
   }
 </style>

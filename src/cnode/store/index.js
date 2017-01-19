@@ -1,50 +1,61 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as api from './api'
+import {fetchTopics, fetchTopicDetail} from './api'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    list: [],
+    activeType: null,
+    lists: {
+      all: [/* string */],  // 每页数量为20条
+      good: [],
+      share: [],
+      ask: [],
+      job: [],
+    },
     detail: {}
   },
+
   actions: {
+    // ensure data for rendering given list type
+    FETCH_LASTEST: ({commit, state}, {type}) => {
+      commit('SET_ACTIVE_TYPE', {type})
+      return fetchTopics(type)
+        .then(({data}) => commit('SET_LIST', {type, data}))
+    },
 
-    FETCH_LATEST ({ commit, state }) {
-      return api.fetchLatest()
+    FETCH_MORE: ({commit, state}, {type}) => {
+      commit('SET_ACTIVE_TYPE', {type})
+      const page = Math.ceil(state.lists[type].length / 20) + 1;
+      return fetchTopics(type, page)
         .then(({data}) => {
-          commit('SET_LIST', [ data ])
+          console.log('FETCH_MORE');
+          data = [...state.list[type], data]
+          commit('SET_LIST', {type, data})
         })
     },
 
-    FETCH_BEFORE ({ commit, state }) {
-      const latest = state.list[state.list.length - 1]
-      if (!latest) {
-        return Promise.reject()
-      }
-      return api.fetchBefore(latest.date)
-        .then(({data}) => {
-          commit('SET_LIST', [ ...state.list, data ])
-        })
+    FETCH_DETAIL ({commit}, id) {
+      return fetchTopicDetail(id)
+        .then(({data}) => commit('SET_DETAIL', data))
     },
-
-    FETCH_DETAIL ({ commit, state }, id) {
-      return api.fetchDetail(id)
-        .then(({data}) => {
-          commit('SET_DETAIL', data)
-        })
-    }
   },
+
   mutations: {
-    SET_LIST (state, data) {
-      state.list = data
+    SET_ACTIVE_TYPE: (state, {type}) => {
+      state.activeType = type
+    },
+
+    SET_LIST: (state, {type, data}) => {
+      state.lists[type] = data
+      console.log('state.lists', state.lists[type]);
     },
 
     SET_DETAIL (state, data) {
       state.detail = data
     }
-  }
+  },
 })
 
 export default store

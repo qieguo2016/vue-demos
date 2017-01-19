@@ -10,15 +10,11 @@ const express = require('express')
 const compression = require('compression')
 const favicon = require('serve-favicon')
 const http = require('http')
-const request = require('superagent')
 const logger = require('./logger')
 const config = require('./config')
 
 // publicPath of static file
 const publicPath = config.publicPath;
-
-// proxy baseURL
-const baseUrl = 'http://news-at.zhihu.com'
 
 const app = express()
 
@@ -42,22 +38,11 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-// proxy request to zhihu
-app.get(publicPath + 'api/*', function (req, res) {
-	let url = baseUrl + req.url
-	if (publicPath !== '/') {
-		url = baseUrl + '/' + req.url.split(publicPath)[1]
-	}
-	logger.info('proxy request: ' + url)
-	request.get(url).pipe(res)
-});
-
-// load image, because zhihu forbidden load img directly
-app.get(publicPath + 'loadImg', function (req, res) {
-	let url = req.query.url;
-	logger.debug('load image: ' + url)
-	request.get(url).pipe(res)
-})
+/**
+ * proxy request to zhihu
+*/
+const zhihudailyProxy = require('./proxy/zhihudaily')
+zhihudailyProxy(app)
 
 // send app's index.html
 if (isProd) {
@@ -71,13 +56,12 @@ if (isProd) {
 			res.send(files[dir])
 		})
 	});
-	// default
-	app.get('*', function (req, res) {
-		logger.info('home request: ' + req.url)
-		res.redirect('/zhihudaily');
-	})
 }
-
+// default page
+app.get('*', function (req, res) {
+	logger.info('home request: ' + req.url)
+	res.redirect(publicPath);
+})
 
 // send app's index.html
 const port = config.SERVER_PORT

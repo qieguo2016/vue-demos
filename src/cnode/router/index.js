@@ -3,37 +3,36 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-import List from '../views/List.vue'
+import {createListView} from '../views/CreateListView'
 import Detail from '../views/Detail.vue'
 import config from '../../../config'
 
-// const publicPath = '/'   // 部署在根目录下直接使用/
-const publicPath = config.publicPath   // '/zhihudaily/'
+const publicPath = config.publicPath   // '/cnode/', 部署在根目录下直接使用'/'
 
 export default new Router({
-	mode: 'history',
-	scrollBehavior: (to, from, savedPosition) => {
-		if (savedPosition) {
-			return savedPosition
-		}
+  mode: 'history',
+  base: publicPath,
+  scrollBehavior: (to, from, savedPosition) => {
+    if (savedPosition) {
+      return savedPosition
+    }
 
-		let position = {
-			x: 0,
-			y: 0
-		}
-		if (to.path === publicPath) {
-			position.y = +sessionStorage.getItem('scrollTop') || 0
-		}
-		return position
-	},
-	routes: [
-		{
-			path: publicPath,
-			component: List
-		},
-		{
-			path: publicPath + 'detail/:id',
-			component: Detail
-		}
-	]
+    let position = {
+      x: 0,
+      y: 0
+    }
+    if (to.path === '/') {
+      position.y = +sessionStorage.getItem('scrollTop') || 0
+    }
+    return position
+  },
+  routes: [
+    {path: '/all', component: createListView('all')},
+    {path: '/good', component: createListView('good')},
+    {path: '/share', component: createListView('share')},
+    {path: '/ask', component: createListView('ask')},
+    {path: '/job', component: createListView('job')},
+    { path: '/detail/:id', component: Detail },
+    {path: '/', redirect: '/all'},
+  ]
 })
