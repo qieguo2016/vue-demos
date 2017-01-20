@@ -39,8 +39,13 @@
       }
     },
     activated () {
+      console.log('detail activated');
       fetchDetail(this.$store)
     },
+
+    deactivated () {
+      console.log('detail deactivated');
+    }
   }
 </script>
 

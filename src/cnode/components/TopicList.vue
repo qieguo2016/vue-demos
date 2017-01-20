@@ -28,12 +28,12 @@
   let isInitialRender = true
 
   // func, [wait=0], [options={}]
-  let timer = null;
-  function throttle(func, wait, options) {
+  const throttle = (func, wait, options) => {
     if (typeof func !== 'function') {
       console.error('throttle args: (function, number)');
       return false;
     }
+    let timer = null;
     return function () {
       if (!timer) {
         timer = setTimeout(()=> {
@@ -49,10 +49,9 @@
 
     created () {
       console.log('created');
-      this.scrollListener = throttle(function (e) {
-        console.log('throttle init');
+      this.scrollListener = throttle( e => {
         if (window.innerHeight + document.body.scrollTop + 150 >= document.body.offsetHeight) {
-          console.log('throttle load more');
+          console.log('this.type', this.type);
           this.loadMore()
         }
       }, 250)
@@ -90,13 +89,17 @@
           this.isLoading = false
         })
       },
+
       loadMore () {
-        console.log('methods loadMore');
+
+        console.log('methods loadMore', this.type);
+
         if (this.isLoading) {
           return
         }
-        store.dispatch('FETCH_MORE', {type: this.type})
+        this.$store.dispatch('FETCH_MORE', {type: this.type})
              .then(() => {
+               console.log('store.dispatch FETCH_MORE');
                this.isLoading = false
              }, () => {
                this.isLoading = false
@@ -105,29 +108,36 @@
     },
 
     beforeMount () {
-      console.log('beforeMount');
+      console.log('beforeMount',this.type);
+      window.addEventListener('scroll', this.scrollListener)
       if (!this.displayedItems.length) {
         store.dispatch('FETCH_LASTEST', {type: this.type})
              .then(() => {
+               console.log('store.dispatch FETCH_LASTEST');
                this.isLoading = false
              }, () => {
                this.isLoading = false
              })
       }
     },
-    activated () {
-      console.log('activated');
-      window.addEventListener('scroll', this.scrollListener)
-    },
-    deactivated () {
-      console.log('deactivated');
-      window.removeEventListener('scroll', this.scrollListener)
-    },
+
+//    activated () {
+//      console.log('activated');
+//      window.addEventListener('scroll', this.scrollListener)
+//    },
+//
+//    deactivated () {
+//      console.log('deactivated');
+//      window.removeEventListener('scroll', this.scrollListener)
+//    },
+
     beforeRouteLeave (to, from, next) {
       console.log('beforeRouteLeave');
+      window.removeEventListener('scroll', this.scrollListener)   // todo
       sessionStorage.setItem('scrollTop', document.body.scrollTop)
       next()
     }
+
   }
 </script>
 

@@ -33,8 +33,8 @@ export function fetchTopicDetail(id) {
   return axios.get(`/topic/${id}`)
 }
 
-// function replaceImageUrl(str) {
-//   let reg = /https?:(\\?\/){2}(pic\d*\.zhimg\.com\\?\/)/g
-//   // return str.replace(reg, 'https://images.weserv.nl/?url=$2')
-//   return str.replace(reg, config.publicPath + 'loadImg?url=$2')
-// }
+function replaceImageUrl(str) {
+  let reg = /https?:(\\?\/){2}(pic\d*\.zhimg\.com\\?\/)/g
+  // return str.replace(reg, 'https://images.weserv.nl/?url=$2')
+  return str.replace(reg, config.publicPath + 'loadImg?url=$2')
+}
