@@ -30,7 +30,6 @@
 
     computed: {
       detail () {
-        console.log('this.$store.state.detail', this.$store.state.detail);
         return this.$store.state.detail
         if (this.$store.state.detail.id === this.$route.params.id) {
           return this.$store.state.detail
@@ -39,25 +38,14 @@
       }
     },
     activated () {
-      console.log('detail activated');
       fetchDetail(this.$store)
     },
 
-    deactivated () {
-      console.log('detail deactivated');
-    },
 
-    beforeRouteEnter (to, from, next) {
-      console.log('===  detail beforeRouteEnter  ===');
-      // 在渲染该组件的对应路由被 confirm 前调用
-      // 不！能！获取组件实例 `this`
-      // 因为当钩子执行前，组件实例还没被创建
-      next()
-    },
     beforeRouteLeave (to, from, next) {
       // 导航离开该组件的对应路由时调用
       // 可以访问组件实例 `this`
-      console.log('===  detail beforeRouteLeave  ===');
+      sessionStorage.setItem('scrollTop', document.body.scrollTop)
       next()
     }
 

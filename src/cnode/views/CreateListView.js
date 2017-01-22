@@ -5,27 +5,34 @@ import TopicList from '../components/TopicList.vue'
 // They are essentially higher order components wrapping ItemList.vue.
 
 export function createListView(type) {
+  return {
 
-	return {
-		name: `${type}-view`,
+    name: `${type}-view`,
 
-		render (h) {
-			return h(TopicList, {props: {type}})
-		},
+    data: function () {
+      return {
+        eventHandler: '',
+      }
+    },
 
-		activated () {
-			this.$children[0].addListener();
-		},
+    activated () {
+      this.eventHandler = 'activated';
+    },
 
-		deactivated () {
-			this.$children[0].removeListener();
-		},
+    deactivated () {
+      this.eventHandler = 'deactivated';
+    },
 
-		beforeRouteLeave (to, from, next) {
-			// 导航离开该组件的对应路由时调用
-			// 可以访问组件实例 `this`
-			sessionStorage.setItem('scrollTop', document.body.scrollTop)
-			next()
-		}
-	}
+
+    beforeRouteLeave (to, from, next) {
+      // 导航离开该组件的对应路由时调用
+      // 可以访问组件实例 `this`
+      sessionStorage.setItem('scrollTop', document.body.scrollTop)
+      next()
+    },
+
+    render (h) {
+      return h(TopicList, {props: {type: type, eventHandler: this.eventHandler}})
+    },
+  }
 }
