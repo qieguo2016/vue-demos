@@ -9,6 +9,7 @@ import config from '../../../config'
 
 const publicPath = config.publicPath   // '/cnode/', 部署在根目录下直接使用'/'
 
+
 export default new Router({
   mode: 'history',
   base: publicPath,

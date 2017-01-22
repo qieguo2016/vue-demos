@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 const zhihudailyProxy = require('./proxy/zhihudaily')
 zhihudailyProxy(app)
 
-// send app's index.html
+// send apps' index.html
 if (isProd) {
 	const baseDir = path.resolve(__dirname, 'dist');
 	let dirs = fs.readdirSync(baseDir)
@@ -57,13 +57,13 @@ if (isProd) {
 		})
 	});
 }
-// default page
+// default app
 app.get('*', function (req, res) {
 	logger.info('home request: ' + req.url)
 	res.redirect(publicPath);
 })
 
-// send app's index.html
+// setup server
 const port = config.SERVER_PORT
 const server = http.createServer(app).listen(port)
 logger.info(`start server http://localhost:${port}`)

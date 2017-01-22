@@ -30,7 +30,6 @@ const store = new Vuex.Store({
 			return fetchTopics(type, page)
 				.then(({data}) => {
 					data = state.lists[type].concat(data);
-					console.log('=== FETCH_MORE ===', type);
 					commit('SET_LIST', {type, data})
 				})
 		},

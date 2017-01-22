@@ -45,7 +45,22 @@
 
     deactivated () {
       console.log('detail deactivated');
+    },
+
+    beforeRouteEnter (to, from, next) {
+      console.log('===  detail beforeRouteEnter  ===');
+      // 在渲染该组件的对应路由被 confirm 前调用
+      // 不！能！获取组件实例 `this`
+      // 因为当钩子执行前，组件实例还没被创建
+      next()
+    },
+    beforeRouteLeave (to, from, next) {
+      // 导航离开该组件的对应路由时调用
+      // 可以访问组件实例 `this`
+      console.log('===  detail beforeRouteLeave  ===');
+      next()
     }
+
   }
 </script>
 

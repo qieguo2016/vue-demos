@@ -13,8 +13,8 @@ module.exports = {
 	SERVER_PORT: 8001,			// 端口
 	// publicPath: '/',		  // 原则上应该用二级域名配合虚拟主机来部署多个应用
 	// srcPath: './src/',		// 写相对路径，最后记得带/
-	// publicPath: '/cnode/',	// 多站点部署时的path，目前为了方便整理用path的方式来区分应用
-	// srcPath: './src/cnode/',		// 写相对路径
-	publicPath: '/zhihudaily/',	// 多站点部署时的path，目前为了方便整理用path的方式来区分应用
-	srcPath: './src/zhihudaily/',		// 写相对路径
+	publicPath: '/cnode/',	// 多站点部署时的path，目前为了方便整理用path的方式来区分应用
+	srcPath: './src/cnode/',		// 写相对路径
+	// publicPath: '/zhihudaily/',	// 多站点部署时的path，目前为了方便整理用path的方式来区分应用
+	// srcPath: './src/zhihudaily/',		// 写相对路径
 }
