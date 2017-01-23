@@ -1,5 +1,8 @@
 /**
- * Created by qieguo on 2016/9/13.
+ * @authors     : qieguo
+ * @date        : 2017/1/13
+ * @version     : 1.0
+ * @description :
  */
 
 const env = process.env.NODE_ENV || "development";
