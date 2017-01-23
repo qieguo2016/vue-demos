@@ -4,7 +4,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 import {createListView} from '../views/CreateListView'
-import Detail from '../views/Detail.vue'
+import DetailView from '../views/DetailView.vue'
+import UserView from '../views/UserView.vue'
 import config from '../../../config'
 
 const publicPath = config.publicPath   // '/cnode/', 部署在根目录下直接使用'/'
@@ -33,7 +34,8 @@ export default new Router({
     {path: '/share', component: createListView('share')},
     {path: '/ask', component: createListView('ask')},
     {path: '/job', component: createListView('job')},
-    { path: '/detail/:id', component: Detail },
+    { path: '/detail/:id', component: DetailView },
+    { path: '/user/:loginname', component: UserView },
     {path: '/', redirect: '/all'},
   ]
 })

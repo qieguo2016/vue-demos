@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {fetchTopics, fetchTopicDetail} from './api'
+import {fetchTopics, fetchTopicDetail, fetchUser} from './api'
 
 Vue.use(Vuex)
 
@@ -14,14 +14,17 @@ const store = new Vuex.Store({
 			ask: [],
 			job: [],
 		},
-		detail: {}
+		details: {},
+		users: {},
 	},
 
 	actions: {
 		// ensure data for rendering given list type
 		FETCH_LASTEST: ({commit, state}, {type}) => {
 			commit('SET_ACTIVE_TYPE', {type})
-			return fetchTopics(type)
+			return state.lists[type].length
+				? state.lists[type]
+				: fetchTopics(type)
 				.then(({data}) => commit('SET_LIST', {type, data}))
 		},
 
@@ -34,13 +37,24 @@ const store = new Vuex.Store({
 				})
 		},
 
-		FETCH_DETAIL ({commit}, id) {
-			return fetchTopicDetail(id)
+		FETCH_DETAIL ({commit, state}, {id}) {
+			return state.details[id]
+				? state.details[id]
+				: fetchTopicDetail(id)
 				.then(({data}) => commit('SET_DETAIL', data))
 		},
+
+		FETCH_USER: ({commit, state}, {loginname}) => {
+			return state.users[loginname]
+				? state.users[loginname]
+				: fetchUser(loginname)
+				.then(({data}) => commit('SET_USER', {data}))
+		}
+
 	},
 
 	mutations: {
+
 		SET_ACTIVE_TYPE: (state, {type}) => {
 			state.activeType = type
 		},
@@ -50,8 +64,13 @@ const store = new Vuex.Store({
 		},
 
 		SET_DETAIL (state, data) {
-			state.detail = data
+			Vue.set(state.details, data.id, data)
+		},
+
+		SET_USER: (state, {data}) => {
+			Vue.set(state.users, data.loginname, data)
 		}
+
 	},
 })
 

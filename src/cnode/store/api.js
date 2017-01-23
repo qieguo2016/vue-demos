@@ -33,6 +33,10 @@ export function fetchTopicDetail(id) {
   return axios.get(`/topic/${id}`)
 }
 
+export function fetchUser(loginname) {
+  return axios.get(`/user/${loginname}`)
+}
+
 function replaceImageUrl(str) {
   let reg = /https?:(\\?\/){2}(pic\d*\.zhimg\.com\\?\/)/g
   // return str.replace(reg, 'https://images.weserv.nl/?url=$2')

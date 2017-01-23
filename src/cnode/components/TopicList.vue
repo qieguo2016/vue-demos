@@ -1,154 +1,196 @@
 <template>
-  <!--  帖子列表  -->
-  <div class="list">
-    <section v-for="item in displayedItems">
-      <!--<div class="cell">-->
-      <!--<a class="user_avatar pull-left" :href="`/user/${item.author.loginname}`">-->
-      <!--<img :src="item.author.avatar_url" :title="item.author.loginname">-->
-      <!--</a>-->
-      <!--<span class="reply_count pull-left">-->
-      <!--<span class="count_of_replies" title="回复数">{{item.reply_count}}</span>-->
-      <!--<span class="count_of_visits" title="点击数">{{item.visit_count}}</span>-->
-      <!--</span>-->
-      <!--</div>-->
-      <router-link
-          :to="`/detail/${item.id}`"
-          class="media"
-      >{{item.title}}
-      </router-link>
-    </section>
-  </div>
+    <div>
+        <!--  帖子列表  -->
+        <ul>
+            <li v-for="item in displayedItems" class="list">
+                <div class="li-left">
+                    <router-link class="li-left-avatar" :to="`/user/${item.author.loginname}`">
+                        <img :src="item.author.avatar_url" :title="item.author.loginname">
+                    </router-link>
+                </div>
+                <router-link :to="`/detail/${item.id}`" class="li-body">
+                    <h3 class="li-body-title">{{item.title}}</h3>
+                    <div class="li-body-ext">
+                        <div class="li-body-count">
+                            <div class="meta-badge">
+                                <img class="icon" src="../assets/icons/icon_visited.svg">
+                                <span class="count">{{item.visit_count}}</span>
+                            </div>
+                            <div class="meta-badge">
+                                <img class="icon" src="../assets/icons/icon_comment.svg">
+                                <span class="count">{{item.reply_count}}</span>
+                            </div>
+                        </div>
+                        <span class="li-body-time">{{item.last_reply_at | dateFromNow}}</span>
+                    </div>
+                </router-link>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
 
-  import {mapActions, mapState} from 'vuex'
-  import store from '../store'
+    import {mapActions, mapState} from 'vuex'
+    import store from '../store'
 
-  const throttle = (func, wait, options) => {
-    let timer = null;
-    return function () {
-      if (!timer) {
-        timer = setTimeout(()=> {
-          func && func();
-          timer = null;
-        }, wait)
-      }
+    const throttle = (func, wait, options) => {
+        let timer = null;
+        return function () {
+            if (!timer) {
+                timer = setTimeout(()=> {
+                    func && func();
+                    timer = null;
+                }, wait)
+            }
+        }
     }
-  }
 
-  export default {
+    export default {
 
-    name: 'topic-list',
+        name: 'topic-list',
 
-    created () {
-      this.scrollListener = throttle(e => {
-        if (window.innerHeight + document.body.scrollTop + 150 >= document.body.offsetHeight) {
-          this.loadMore()
-          this.isLoading = true
-        }
-      }, 250)
-    },
+        created () {
+            this.scrollListener = throttle(e => {
+                if (window.innerHeight + document.body.scrollTop + 150 >= document.body.offsetHeight) {
+                    this.loadMore()
+                    this.isLoading = true
+                }
+            }, 250)
+        },
 
-    props: {
-      type: String,
-      eventHandler: String,
-    },
+        props: {
+            type: String,
+            eventHandler: String,
+        },
 
-    data () {
-      return {
-        isLoading: false,
-        // transition: 'slide-up',
-      }
-    },
+        data () {
+            return {
+                isLoading: false,
+                // transition: 'slide-up',
+            }
+        },
 
-    watch: {
-      eventHandler: function (val, oldVal) {
-        switch (val) {
-          case 'activated':
-            window.addEventListener('scroll', this.scrollListener)
-            break;
-          case 'deactivated':
-            window.removeEventListener('scroll', this.scrollListener)
-            break;
-          default :
-            console.log('topic-list.eventHandler watch default: ', val);
-        }
-      }
-    },
+        watch: {
+            eventHandler: function (val, oldVal) {
+                switch (val) {
+                    case 'activated':
+                        window.addEventListener('scroll', this.scrollListener)
+                        break;
+                    case 'deactivated':
+                        window.removeEventListener('scroll', this.scrollListener)
+                        break;
+                    default :
+                        console.log('topic-list.eventHandler watch default: ', val);
+                }
+            }
+        },
 
-    computed: {
-      ...mapState({
-        displayedItems: function (state) {
-          return state.lists[this.type]
-        }
-      }),
-    },
+        computed: {
+            ...mapState({
+                displayedItems: function (state) {
+                    return state.lists[this.type]
+                }
+            }),
 
-    methods: {
-      loadMore () {
-        if (this.isLoading) {
-          return
-        }
-        this.$store.dispatch('FETCH_MORE', {type: this.type})
-            .then(() => {
-              this.isLoading = false
-            }, () => {
-              this.isLoading = false
-            })
-      },
-    },
+        },
 
-    beforeMount () {
-      if (!this.displayedItems.length) {
-        store.dispatch('FETCH_LASTEST', {type: this.type})
-             .then(() => {
-               this.isLoading = false
-             }, () => {
-               this.isLoading = false
-             })
-      }
-    },
+        methods: {
+            loadMore () {
+                if (this.isLoading) {
+                    return
+                }
+                this.$store.dispatch('FETCH_MORE', {type: this.type})
+                    .then(() => {
+                        this.isLoading = false
+                    }, () => {
+                        this.isLoading = false
+                    })
+            },
+        },
 
-  }
+        beforeMount () {
+            if (!this.displayedItems.length) {
+                store.dispatch('FETCH_LASTEST', {type: this.type})
+                     .then(() => {
+                         this.isLoading = false
+                     }, () => {
+                         this.isLoading = false
+                     })
+            }
+        },
+
+    }
 </script>
 
 
 <style>
 
-  .list-title {
-    padding-top: 8px;
-    padding-bottom: 6px;
-    color: #fff;
-    font-size: 16px;
-    background-color: #009dd7;
-    text-align: center;
-  }
+    .list {
+        display: flex;
+        padding: 12px 0 8px;
+        justify-content: flex-start;
+        align-items: flex-start;
+        border-bottom: 1px solid #ddd;
+    }
 
-  .media {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    min-height: 40px;
-    border-bottom: 1px solid #ddd;
-  }
+    .list:hover,
+    .list:focus {
+        transform: scale(1.01);
+        text-decoration: none;
+        outline: none;
+    }
 
-  .media:hover,
-  .media:focus {
-    transform: scale(1.01);
-    text-decoration: none;
-    outline: none;
-  }
+    .list:last-child {
+        border-bottom: none;
+    }
 
-  .media-body {
-    color: #444;
-    font-size: 16px;
-    text-decoration: none;
-    padding-right: 10px;
-  }
+    .li-left {
+        margin-right: 10px;
+    }
 
-  .media:last-child {
-    margin-bottom: 0;
-  }
+    .li-left-avatar img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .li-body {
+        flex: 1 0 230px;
+        margin-top: -4px;
+        color: #444;
+        text-decoration: none;
+    }
+
+    .li-body-title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .li-body-ext {
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 5px;
+    }
+
+    .li-body-count {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .meta-badge {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-right: 5px;
+    }
+
+    .meta-badge .icon {
+        height: 20px;
+        width: 20px;
+        margin-right: 3px;
+    }
 
 </style>
