@@ -1,9 +1,16 @@
 {
-  "name": "zhihu-daily",
-  "description": "zhihu-daily: A Vue.js project",
+  "name": "vue-demos",
+  "description": "A Vue.js project collections",
   "version": "1.0.0",
-  "author": "qieguo <qieguo.chow@gmail.com>",
   "private": true,
+  "author": {
+    "name": "qieguo",
+    "email": "qieguo.chow@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qieguo2016/vue-demos.git"
+  },
   "scripts": {
     "dev": "node server",
     "start": "cross-env NODE_ENV=production node server",
@@ -11,6 +18,12 @@
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",
     "clean": "node bulid/clean"
   },
+  "keywords": [
+    "vue",
+    "demo",
+    "web",
+    "app"
+  ],
   "dependencies": {
     "animate": "^1.0.0",
     "animate.css": "^3.5.2",
@@ -47,5 +60,6 @@
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-hot-middleware": "^2.13.2"
-  }
+  },
+  "license": "MIT"
 }
