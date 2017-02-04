@@ -6,7 +6,7 @@ Vue Demo collections (Vue 2.0)
   
 ### Summary
 
-Vue2.0的demo集，所有demo的前端都基于Vue2.0、Vuex、Vue-router、axios，使用webpack 2管理模块资源，未涉及ssr，均为静态文件伺服。
+demo集中所有demo的前端都基于Vue2.0、Vuex、Vue-router、axios，使用webpack 2管理模块资源，未涉及ssr，均为静态文件伺服。
 
 后端基于express + superagent等库搭建，主要为代理转发以解决跨域、图片防盗链等权限问题。
 
