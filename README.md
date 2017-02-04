@@ -44,12 +44,12 @@ npm start
 
 ### 知乎日报
 
-[Live Demo](http://demo.qieguo.me/zhihudaily/)/ [Source Code]()
+[Live Demo](http://vue.qieguo.me/zhihudaily/)/ [Source Code]()
 
 ![zhihudaily](.github/zhihudaily.png)
 
 ### CNode论坛
 
-[Live Demo](http://demo.qieguo.me/cnode/) / [Source Code]()
+[Live Demo](http://vue.qieguo.me/cnode/) / [Source Code]()
 
 ![CNode](.github/cnode.png)
